@@ -1,51 +1,84 @@
+      
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Throttle Detective</title>
+  <!-- Google Font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+  <!-- Stylesheet -->
   <link rel="stylesheet" href="styles.css" />
   <!-- Include Chart.js from a CDN -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-  <header>
-    <h1>Throttle Detective</h1>
-    <p>Uncover if your ISP is throttling your internet speed.</p>
-  </header>
-  <main>
-    <p>
-      Welcome to Throttle Detective! This tool will help you determine if
-      your internet service provider is slowing down your internet speed after
-      a certain data usage. For now, this is just a placeholder UI. Stay tuned for the full functionality!
-    </p>
-    <button id="start-test">Start Test</button>
-    <button id="stop-test" style="display: none;">Stop Test</button>
-    <div id="test-results" style="display: none; margin-top: 20px;">
-      <p>Download Speed: <span id="download-speed">--</span></p>
-      <p>Status: <span id="download-status">Idle</span></p>
-      <!-- Progress indicator -->
-      <progress id="download-progress" value="0" max="100" style="display: none; width: 100%;"></progress>
-      <span id="progress-text"></span>
-      <p>
-        Total Data Downloaded:
-        <span id="total-data" style="font-size: 1.5rem; color: #28a745;">--</span>
+  <div class="container">
+    <header>
+      <h1>Throttle Detective</h1>
+      <p>Uncover if your ISP is throttling your internet speed.</p>
+    </header>
+
+    <main>
+      <p class="intro-text">
+        Welcome! This tool helps determine if your ISP slows down your connection after high usage. Press "Start Test" to begin monitoring.
       </p>
-      <p>
-        Average Speed:
-        <span id="average-speed" style="font-size: 1.5rem; color: #dc3545;">--</span>
-      </p>
-      <p>
-        Elapsed Time: 
-        <span id="elapsed-time" style="font-size: 1.5rem; color: #007bff;">00:00</span>
-      </p>
-      <button id="stop-test" style="display: none;">Stop Test</button>
-    </div>
-    <!-- Chart Container -->
-    <div style="margin-top: 40px;">
-      <canvas id="speedChart" width="600" height="400"></canvas>
-    </div>
-  </main>
+      <div class="button-container">
+         <button id="start-test">Start Test</button>
+         <button id="stop-test" style="display: none;">Stop Test</button>
+      </div>
+
+      <!-- Test Results Section -->
+      <div id="test-results" style="display: none;" aria-live="polite">
+        <h2>Test Progress</h2>
+        <div class="result-item">
+          <label>Status:</label>
+          <span id="download-status">Idle</span>
+        </div>
+        <div class="result-item">
+          <label>Current Speed:</label>
+          <span id="download-speed">--</span>
+        </div>
+
+        <!-- Progress indicator -->
+        <div class="progress-container">
+           <label for="download-progress">Progress:</label>
+           <progress id="download-progress" value="0" max="100" style="display: none;"></progress>
+           <span id="progress-text">0%</span>
+        </div>
+
+        <div class="summary-grid">
+           <div class="summary-item">
+             <label>Total Downloaded:</label>
+             <span id="total-data">--</span>
+           </div>
+           <div class="summary-item">
+             <label>Average Speed:</label>
+             <span id="average-speed">--</span>
+           </div>
+           <div class="summary-item">
+             <label>Elapsed Time:</label>
+             <span id="elapsed-time">00:00</span>
+           </div>
+        </div>
+        <!-- Note: Removed the duplicate stop button from here -->
+      </div>
+
+      <!-- Chart Container -->
+      <div class="chart-container" style="display: none;">
+         <canvas id="speedChart"></canvas>
+      </div>
+    </main>
+
+    <footer>
+      <p>© 2024 Throttle Detective.</p>
+    </footer>
+  </div>
+
   <script src="main.js"></script>
 </body>
 </html>
+
+    

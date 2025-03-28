@@ -1,97 +1,326 @@
-/* Styles for Throttle Detective */
-body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 100vh;
-    background-color: #f4f4f9;
-    color: #333;
+/* --- Modern Styles for Throttle Detective --- */
+
+/* --- Variables --- */
+:root {
+    --primary-color: #007aff; /* A slightly brighter blue */
+    --primary-hover-color: #005ecb;
+    --secondary-color: #e5e5ea; /* Light gray for backgrounds */
+    --background-color: #f2f2f7; /* Slightly off-white */
+    --card-background-color: #ffffff;
+    --text-color: #1c1c1e; /* Near black */
+    --text-secondary-color: #636366; /* Medium gray */
+    --text-tertiary-color: #8e8e93; /* Lighter gray */
+    --border-color: #c6c6c8;
+    --success-color: #34c759;
+    --warning-color: #ff9500;
+    --danger-color: #ff3b30;
+    --font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+    --border-radius: 8px;
+    --box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    --box-shadow-light: 0 2px 6px rgba(0, 0, 0, 0.05);
 }
 
+/* --- Global Styles --- */
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: var(--font-family);
+    background-color: var(--background-color);
+    color: var(--text-color);
+    line-height: 1.6;
+    display: flex; /* Keep centering for overall layout */
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+.container {
+    width: 100%;
+    max-width: 700px; /* Increased max-width */
+    background-color: var(--card-background-color);
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    padding: 30px 40px; /* More padding */
+    text-align: center; /* Center text within container */
+}
+
+/* --- Header --- */
 header {
-    text-align: center;
-    margin-bottom: 20px;
+    margin-bottom: 30px;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 20px;
 }
 
 header h1 {
-    font-size: 2.5rem;
-    margin: 0;
+    font-size: 2.2rem; /* Slightly adjusted */
+    font-weight: 700;
+    margin-bottom: 5px;
+    color: var(--text-color);
 }
 
 header p {
     font-size: 1rem;
-    color: #666;
+    color: var(--text-secondary-color);
 }
 
+/* --- Main Content --- */
 main {
     text-align: center;
-    max-width: 600px;
 }
 
-main p {
-    font-size: 1.2rem;
-    margin-bottom: 20px;
+main .intro-text {
+    font-size: 1.1rem;
+    color: var(--text-secondary-color);
+    margin-bottom: 30px;
+    max-width: 550px; /* Constrain intro text width */
+    margin-left: auto;
+    margin-right: auto;
 }
 
-footer {
-    margin-top: 20px;
-    font-size: 0.9rem;
-    color: #999;
+/* --- Buttons --- */
+.button-container {
+    margin-bottom: 30px;
+}
+
+button {
+    font-family: inherit;
+    font-size: 1.1rem; /* Adjusted size */
+    font-weight: 500;
+    padding: 12px 25px; /* More padding */
+    border: none;
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.1s ease, box-shadow 0.2s ease;
+    margin: 5px; /* Spacing between buttons if both shown */
 }
 
 #start-test {
-    font-size: 1.5rem;
-    padding: 10px 20px;
-    background-color: #007BFF;
+    background-color: var(--primary-color);
     color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
+    box-shadow: 0 2px 5px rgba(0, 122, 255, 0.3);
 }
 
 #start-test:hover {
-    background-color: #0056b3;
+    background-color: var(--primary-hover-color);
+    box-shadow: 0 4px 8px rgba(0, 122, 255, 0.4);
+    transform: translateY(-1px);
+}
+
+#start-test:active {
+    transform: translateY(0);
+    box-shadow: 0 1px 3px rgba(0, 122, 255, 0.3);
 }
 
 #stop-test {
-    font-size: 1.5rem;
-    padding: 10px 20px;
-    background-color: #007BFF;
+    background-color: var(--danger-color); /* Use danger color for stop */
     color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    display: inline-block;
-    margin-top: 10px;
+    box-shadow: 0 2px 5px rgba(255, 59, 48, 0.3);
+    /* display: inline-block; */ /* managed by JS */
 }
 
 #stop-test:hover {
-    background-color: #0056b3;
+    background-color: #d9352a; /* Darker red */
+    box-shadow: 0 4px 8px rgba(255, 59, 48, 0.4);
+    transform: translateY(-1px);
 }
 
+#stop-test:active {
+    transform: translateY(0);
+    box-shadow: 0 1px 3px rgba(255, 59, 48, 0.3);
+}
+
+
+/* --- Test Results Area --- */
 #test-results {
-    display: none;
-    margin-top: 20px;
-    padding: 20px;
-    border: 2px solid #007BFF;
-    border-radius: 10px;
-    background-color: #e9f5ff;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    text-align: left;
+    /* display: none; */ /* managed by JS */
+    margin-top: 30px;
+    padding: 25px;
+    border: 1px solid var(--border-color); /* Subtle border */
+    border-radius: var(--border-radius);
+    background-color: #f9f9f9; /* Very light gray, slightly different from main bg */
+    box-shadow: var(--box-shadow-light);
+    text-align: left; /* Align text left within the results box */
 }
 
-#test-results p {
-    margin: 10px 0;
-    font-size: 1.2rem;
+#test-results h2 {
+    font-size: 1.4rem;
+    margin-bottom: 20px;
+    text-align: center;
+    color: var(--text-color);
+}
+
+#test-results .result-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+    font-size: 1.1rem;
+}
+
+#test-results label {
+    color: var(--text-secondary-color);
+    font-weight: 500;
 }
 
 #test-results span {
-    font-weight: bold;
-    color: #007BFF;
+    font-weight: 500;
+    color: var(--primary-color); /* Default color for dynamic spans */
+}
+
+/* Specific span styles */
+#download-status { color: var(--warning-color); } /* Example color */
+#download-speed { color: var(--primary-color); }
+
+/* --- Progress Bar --- */
+.progress-container {
+    margin: 20px 0;
+    text-align: center; /* Center progress elements */
+}
+.progress-container label {
+    display: block; /* Label on its own line */
+    font-size: 0.9rem;
+    color: var(--text-secondary-color);
+    margin-bottom: 5px;
+}
+
+progress#download-progress {
+    /* Reset appearance */
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+
+    display: block; /* Ensure it takes full width available */
+    width: 100%;
+    height: 12px; /* Increased height */
+    border: none; /* Remove default border */
+    border-radius: 10px; /* Rounded track */
+    background-color: var(--secondary-color); /* Track color */
+    overflow: hidden; /* Ensure value stays within bounds */
+    margin-bottom: 5px;
+}
+
+/* Webkit browsers (Chrome, Safari) */
+progress#download-progress::-webkit-progress-bar {
+    background-color: var(--secondary-color);
+    border-radius: 10px;
+}
+
+progress#download-progress::-webkit-progress-value {
+    background-color: var(--primary-color);
+    border-radius: 10px;
+    transition: width 0.3s ease; /* Smooth progress animation */
+}
+
+/* Firefox */
+progress#download-progress::-moz-progress-bar {
+    background-color: var(--primary-color);
+    border-radius: 10px;
+    transition: width 0.3s ease;
+}
+
+#progress-text {
+    font-size: 0.9rem;
+    color: var(--text-secondary-color);
+    display: block; /* Show below progress bar */
+}
+
+/* --- Summary Grid --- */
+.summary-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); /* Responsive grid */
+    gap: 20px;
+    margin-top: 25px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border-color);
+}
+
+.summary-item {
+    text-align: center;
+    background-color: var(--card-background-color);
+    padding: 15px;
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow-light);
+}
+
+.summary-item label {
+    display: block;
+    font-size: 0.9rem;
+    color: var(--text-secondary-color);
+    margin-bottom: 5px;
+}
+
+.summary-item span {
+    display: block;
+    font-size: 1.5rem; /* Larger font for summary values */
+    font-weight: 700; /* Bold */
+    /* Assign specific colors via JS if needed, or use defaults */
+}
+#total-data { color: var(--success-color); }
+#average-speed { color: var(--danger-color); }
+#elapsed-time { color: var(--primary-color); }
+
+
+/* --- Chart Container --- */
+.chart-container {
+    margin-top: 40px;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow-light);
+    border: 1px solid var(--border-color);
+    /* display: none; */ /* managed by JS */
+}
+
+/* --- Footer --- */
+footer {
+    margin-top: 40px; /* Space above footer */
+    padding-top: 20px;
+    border-top: 1px solid var(--border-color);
+    font-size: 0.9rem;
+    color: var(--text-tertiary-color);
+    text-align: center;
+}
+
+/* --- Responsive Adjustments --- */
+@media (max-width: 600px) {
+    body {
+        padding: 10px; /* Less padding on small screens */
+    }
+    .container {
+        padding: 20px; /* Less padding inside container */
+    }
+    header h1 {
+        font-size: 1.8rem;
+    }
+    main .intro-text {
+        font-size: 1rem;
+    }
+    button {
+        font-size: 1rem;
+        padding: 10px 20px;
+    }
+    #test-results {
+        padding: 15px;
+    }
+    #test-results h2 {
+        font-size: 1.2rem;
+    }
+    #test-results .result-item {
+        font-size: 1rem;
+    }
+    .summary-grid {
+        grid-template-columns: 1fr; /* Stack items vertically */
+        gap: 15px;
+    }
+    .summary-item span {
+        font-size: 1.3rem;
+    }
+    .chart-container {
+        padding: 10px;
+    }
 }
