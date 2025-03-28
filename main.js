@@ -1,24 +1,17 @@
-// Add functionality to stop the test
-let testInterval;
 let elapsedTimeInterval; // Interval for updating the elapsed time
 
 document.getElementById('start-test').addEventListener('click', function() {
     const resultsDiv = document.getElementById('test-results');
-    const stopButton = document.getElementById('stop-test');
     resultsDiv.style.display = 'block';
-    stopButton.style.display = 'inline-block';
 });
 
-// Modify the "Start Test" button click event to store the interval ID
+// Modify the "Start Test" button click event
 document.getElementById('start-test').addEventListener('click', () => {
   // Immediately run a test
   runDownloadTest();
 
   // Show test results section
   document.getElementById('test-results').style.display = 'block';
-
-  // Schedule to run the test every 30 minutes (30 * 60 * 1000 ms)
-  testInterval = setInterval(runDownloadTest, 30 * 60 * 1000);
 
   // Start the elapsed time timer
   const elapsedTimeEl = document.getElementById('elapsed-time');
@@ -32,32 +25,10 @@ document.getElementById('start-test').addEventListener('click', () => {
   }, 1000);
 });
 
-// Add functionality to stop the test
-document.getElementById('stop-test').addEventListener('click', function() {
-    const resultsDiv = document.getElementById('test-results');
-    resultsDiv.style.display = 'none';
-    this.style.display = 'none'; // Correctly hides the stop button itself
-});
-
-document.getElementById('stop-test').addEventListener('click', () => {
-  if (testInterval) {
-    clearInterval(testInterval);
-    testInterval = null;
-  }
-  const statusEl = document.getElementById('download-status');
-  statusEl.textContent = 'Test stopped';
-
-  // Stop the elapsed time timer
-  if (elapsedTimeInterval) {
-    clearInterval(elapsedTimeInterval);
-    elapsedTimeInterval = null;
-  }
-});
-
-// URL of a 100 MB file – ensure the file supports CORS!
-const FILE_URL = 'http://cachefly.cachefly.net/100mb.test';
-// Size of the file in bytes (adjust if needed, here 100 MB)
-const FILE_SIZE_BYTES = 100 * 1024 * 1024;
+// URL of a 10 MB file – ensure the file supports CORS!
+const FILE_URL = 'http://cachefly.cachefly.net/10mb.test';
+// Size of the file in bytes (adjusted to 10 MB)
+const FILE_SIZE_BYTES = 10 * 1024 * 1024;
 
 // Key for localStorage
 const STORAGE_KEY = 'throttleTestData';
@@ -146,6 +117,11 @@ async function runDownloadTest() {
 function saveTestResult(result) {
   const stored = localStorage.getItem(STORAGE_KEY);
   const data = stored ? JSON.parse(stored) : [];
+  
+  // Calculate total downloaded data usage
+  const totalDownloadedMB = data.reduce((sum, curr) => sum + curr.dataDownloadedMB, 0) + result.dataDownloadedMB;
+  result.totalDownloadedMB = totalDownloadedMB; // Add total downloaded data usage key
+
   data.push(result);
   localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
 }
@@ -172,11 +148,8 @@ function updateChart() {
   const data = stored ? JSON.parse(stored) : [];
   if (!data.length) return;
 
-  // Prepare data for the chart: timestamps (x-axis) and speeds (y-axis)
-  const labels = data.map(item => {
-    const d = new Date(item.timestamp);
-    return d.toLocaleTimeString();
-  });
+  // Prepare data for the chart: total downloaded data usage (x-axis) and speeds (y-axis)
+  const labels = data.map(item => item.totalDownloadedMB.toFixed(2)); // Total downloaded data in MB
   const speeds = data.map(item => item.speedMbps);
 
   const ctx = document.getElementById('speedChart').getContext('2d');
@@ -202,8 +175,12 @@ function updateChart() {
       },
       options: {
         scales: {
-          x: { title: { display: true, text: 'Time' } },
-          y: { title: { display: true, text: 'Speed (Mbps)' } }
+          x: { 
+            title: { display: true, text: 'Total Data Usage (MB)' } 
+          },
+          y: { 
+            title: { display: true, text: 'Speed (Mbps)' } 
+          }
         }
       }
     });
