@@ -46,12 +46,16 @@ async function runDownloadTest() {
   progressText.textContent = '0%';
 
   statusEl.textContent = 'Downloading...';
+
+  // Generate a unique URL to bypass cache
+  const uniqueUrl = `${FILE_URL}?nocache=${Date.now()}`;
+
   // Start time
   const startTime = performance.now();
 
   try {
     // Start the download via fetch.
-    const response = await fetch(FILE_URL, { cache: 'no-cache' });
+    const response = await fetch(uniqueUrl, { cache: 'no-cache' });
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
