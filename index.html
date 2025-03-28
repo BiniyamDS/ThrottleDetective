@@ -14,9 +14,12 @@
     <main>
         <p>Welcome to Throttle Detective! This tool will help you determine if your internet service provider is slowing down your internet speed after a certain data usage. For now, this is just a placeholder UI. Stay tuned for the full functionality!</p>
         <button id="start-test">Start Test</button>
+        <div id="test-results" style="display: none; margin-top: 20px;">
+            <p>Download Speed: <span id="download-speed">100 Mbps</span></p>
+            <p>Status: <span id="download-status">Downloading...</span></p>
+            <button id="stop-test" style="display: none;">Stop Test</button>
+        </div>
     </main>
-    <footer>
-        <p>&copy; 2023 Throttle Detective. All rights reserved.</p>
-    </footer>
+    <script src="main.js"></script>
 </body>
 </html>
