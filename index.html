@@ -1,27 +1,50 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Throttle Detective</title>
-    <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Throttle Detective</title>
+  <link rel="stylesheet" href="styles.css" />
+  <!-- Include Chart.js from a CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-    <header>
-        <h1>Throttle Detective</h1>
-        <p>Uncover if your ISP is throttling your internet speed.</p>
-    </header>
-    <main>
-        <p>Welcome to Throttle Detective! This tool will help you determine if your internet service provider is slowing down your internet speed after a certain data usage. For now, this is just a placeholder UI. Stay tuned for the full functionality!</p>
-        <button id="start-test">Start Test</button>
-        <div id="test-results" style="display: none; margin-top: 20px;">
-            <p>Download Speed: <span id="download-speed">100 Mbps</span></p>
-            <p>Status: <span id="download-status">Downloading...</span></p>
-            <p>Total Data Downloaded: <span id="total-data" style="font-size: 1.5rem; color: #28a745;">500 MB</span></p>
-            <p>Average Speed: <span id="average-speed" style="font-size: 1.5rem; color: #dc3545;">95 Mbps</span></p>
-            <button id="stop-test" style="display: none;">Stop Test</button>
-        </div>
-    </main>
-    <script src="main.js"></script>
+  <header>
+    <h1>Throttle Detective</h1>
+    <p>Uncover if your ISP is throttling your internet speed.</p>
+  </header>
+  <main>
+    <p>
+      Welcome to Throttle Detective! This tool will help you determine if
+      your internet service provider is slowing down your internet speed after
+      a certain data usage. For now, this is just a placeholder UI. Stay tuned for the full functionality!
+    </p>
+    <button id="start-test">Start Test</button>
+    <div id="test-results" style="display: none; margin-top: 20px;">
+      <p>Download Speed: <span id="download-speed">--</span></p>
+      <p>Status: <span id="download-status">Idle</span></p>
+      <!-- Progress indicator -->
+      <progress id="download-progress" value="0" max="100" style="display: none; width: 100%;"></progress>
+      <span id="progress-text"></span>
+      <p>
+        Total Data Downloaded:
+        <span id="total-data" style="font-size: 1.5rem; color: #28a745;">--</span>
+      </p>
+      <p>
+        Average Speed:
+        <span id="average-speed" style="font-size: 1.5rem; color: #dc3545;">--</span>
+      </p>
+      <p>
+        Elapsed Time: 
+        <span id="elapsed-time" style="font-size: 1.5rem; color: #007bff;">00:00</span>
+      </p>
+      <button id="stop-test" style="display: none;">Stop Test</button>
+    </div>
+    <!-- Chart Container -->
+    <div style="margin-top: 40px;">
+      <canvas id="speedChart" width="600" height="400"></canvas>
+    </div>
+  </main>
+  <script src="main.js"></script>
 </body>
 </html>
