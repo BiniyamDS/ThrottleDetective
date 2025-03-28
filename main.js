@@ -1,4 +1,7 @@
 let elapsedTimeInterval; // Interval for updating the elapsed time
+let testInterval; // Interval for running tests repeatedly
+let isTestRunning = false; // Flag to prevent overlapping tests
+let currentDownloadController; // Controller to abort the current download
 
 document.getElementById('start-test').addEventListener('click', function() {
     const resultsDiv = document.getElementById('test-results');
@@ -23,6 +26,44 @@ document.getElementById('start-test').addEventListener('click', () => {
     const seconds = (elapsedSeconds % 60).toString().padStart(2, '0');
     elapsedTimeEl.textContent = `${minutes}:${seconds}`;
   }, 1000);
+
+  // Show the Stop Test button and hide the Start Test button
+  document.getElementById('start-test').style.display = 'none';
+  document.getElementById('stop-test').style.display = 'inline-block';
+
+  // Start running tests in a loop
+  testInterval = setInterval(() => {
+    if (!isTestRunning) {
+      runDownloadTest();
+    }
+  }, 5000); // Run every 5 seconds
+});
+
+document.getElementById('stop-test').addEventListener('click', () => {
+  // Stop the test loop
+  if (testInterval) {
+    clearInterval(testInterval);
+    testInterval = null;
+  }
+
+  // Stop the elapsed time timer
+  if (elapsedTimeInterval) {
+    clearInterval(elapsedTimeInterval);
+    elapsedTimeInterval = null;
+  }
+
+  // Abort the current download if running
+  if (currentDownloadController) {
+    currentDownloadController.abort();
+    currentDownloadController = null;
+  }
+
+  // Reset UI
+  document.getElementById('start-test').style.display = 'inline-block';
+  document.getElementById('stop-test').style.display = 'none';
+  document.getElementById('download-status').textContent = 'Idle';
+  document.getElementById('download-progress').style.display = 'none';
+  document.getElementById('progress-text').textContent = '';
 });
 
 // URL of a 10 MB file – ensure the file supports CORS!
@@ -35,6 +76,9 @@ const STORAGE_KEY = 'throttleTestData';
 
 // Function to run the download test
 async function runDownloadTest() {
+  if (isTestRunning) return; // Prevent overlapping tests
+  isTestRunning = true;
+
   const statusEl = document.getElementById('download-status');
   const downloadSpeedEl = document.getElementById('download-speed');
   const progressBar = document.getElementById('download-progress');
@@ -50,12 +94,16 @@ async function runDownloadTest() {
   // Generate a unique URL to bypass cache
   const uniqueUrl = `${FILE_URL}?nocache=${Date.now()}`;
 
+  // Create an AbortController to cancel the fetch if needed
+  currentDownloadController = new AbortController();
+  const signal = currentDownloadController.signal;
+
   // Start time
   const startTime = performance.now();
 
   try {
-    // Start the download via fetch.
-    const response = await fetch(uniqueUrl, { cache: 'no-cache' });
+    // Start the download via fetch with abort support
+    const response = await fetch(uniqueUrl, { cache: 'no-cache', signal });
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
@@ -85,12 +133,6 @@ async function runDownloadTest() {
     progressBar.style.display = 'none';
     progressText.textContent = '';
 
-    // Stop the elapsed time timer
-    if (elapsedTimeInterval) {
-      clearInterval(elapsedTimeInterval);
-      elapsedTimeInterval = null;
-    }
-
     // Update local storage with new test data
     saveTestResult({
       timestamp: Date.now(),
@@ -102,18 +144,19 @@ async function runDownloadTest() {
     updateTestResultsUI();
     // Update the chart with the new data
     updateChart();
-
   } catch (error) {
-    console.error('Download error:', error);
-    statusEl.textContent = 'Error during download';
+    if (error.name === 'AbortError') {
+      console.log('Download aborted');
+      statusEl.textContent = 'Download aborted';
+    } else {
+      console.error('Download error:', error);
+      statusEl.textContent = 'Error during download';
+    }
     progressBar.style.display = 'none';
     progressText.textContent = '';
-
-    // Stop the elapsed time timer in case of an error
-    if (elapsedTimeInterval) {
-      clearInterval(elapsedTimeInterval);
-      elapsedTimeInterval = null;
-    }
+  } finally {
+    isTestRunning = false; // Allow the next test to start
+    currentDownloadController = null; // Reset the controller
   }
 }
 
